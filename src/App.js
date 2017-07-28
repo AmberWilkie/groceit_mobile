@@ -28,7 +28,7 @@ import {
 } from 'native-base';
 
 import Counter from './components/Counter';
-import AddModal from './AddItem.js';
+import AddModal from './components/AddItem.js';
 
 import bag from './images/grocery-bag.jpg';
 
@@ -72,6 +72,10 @@ const groceryList = [
 export default class groceit_mobile extends Component {
   state = {
     groceryList: []
+  }
+
+  static navigationOptions = {
+    tabBarLabel: 'Grocery List'
   }
 
   getGroceryList = () => {
@@ -120,7 +124,7 @@ export default class groceit_mobile extends Component {
     this.setState( prevState => ({
       groceryList: prevState.groceryList.map( section => {
         if (section.name === item.category) {
-          const data = section.data.concat({id: 3, name: item.name, quantity: item.quantity}).sort ( (a, b) => a.name > b.name ? 1 : -1)
+          const data = section.data.concat({id: Math.floor(Math.random() * 100000), name: item.name, quantity: item.quantity}).sort ( (a, b) => a.name > b.name ? 1 : -1)
           return {...section, data: data }
         } else {
           return section;
@@ -170,6 +174,7 @@ export default class groceit_mobile extends Component {
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     const renderSectionHeader = ({section}) => {
       return (
         <Separator bordered>
@@ -180,7 +185,6 @@ export default class groceit_mobile extends Component {
     
     return (
       <Container>
-        <Header />
         <Content>
         <Text>{this.state.error}</Text>
         <SectionList

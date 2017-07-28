@@ -49,7 +49,7 @@ class AddModal extends Component {
           <Button full success onPress={() => {
             this.setModalVisible(true)
           }}>
-            <Text>Add Item</Text>
+            <Text style={{color: 'white'}}>ADD ITEM</Text>
           </Button>
       </View>
     );

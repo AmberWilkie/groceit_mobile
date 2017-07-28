@@ -11,6 +11,6 @@ import {
   Text,
   View
 } from 'react-native';
-import groceit_mobile from './src/App';
+import Nav from './src/Nav';
 
-AppRegistry.registerComponent('groceit_mobile', () => groceit_mobile);
+AppRegistry.registerComponent('groceit_mobile', () => Nav);
