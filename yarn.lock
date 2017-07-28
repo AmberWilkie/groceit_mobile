@@ -3168,6 +3168,18 @@ react-devtools-core@2.3.1:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
+react-native-accordion@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-accordion/-/react-native-accordion-1.0.1.tgz#1086ac012b9d7c90cd1efd014f2804baa16a1f5b"
+  dependencies:
+    react-tween-state "0.0.5"
+
+react-native-collapsible@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/react-native-collapsible/-/react-native-collapsible-0.8.1.tgz#af5e020e0b0615ad32f30f6262ae2008a4a56e3a"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-dismiss-keyboard/-/react-native-dismiss-keyboard-1.0.0.tgz#32886242b3f2317e121f3aeb9b0a585e2b879b49"
@@ -3344,6 +3356,12 @@ react-transform-hmr@^1.0.4:
   dependencies:
     global "^4.3.0"
     react-proxy "^1.1.7"
+
+react-tween-state@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/react-tween-state/-/react-tween-state-0.0.5.tgz#bd25c27f2558b839a6c7aee3b85fab967760d1d2"
+  dependencies:
+    tween-functions "^1.0.1"
 
 react-tween-state@^0.1.5:
   version "0.1.5"

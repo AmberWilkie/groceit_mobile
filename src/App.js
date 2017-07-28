@@ -32,6 +32,8 @@ import AddModal from './components/AddItem.js';
 
 import bag from './images/grocery-bag.jpg';
 
+const permittedCategories = ['Dairy', 'Dry Goods', 'Vegetables', 'Meat', 'Frozen']
+
 const groceryList = [
   {
     id: 0,
@@ -67,6 +69,11 @@ const groceryList = [
       { id: 1, name: 'Värmkorv', quantity: 1}
     ],
   },
+  {
+    id: 4,
+    name: 'Other',
+    data: []
+  }
 ];
 
 export default class groceit_mobile extends Component {
@@ -119,12 +126,20 @@ export default class groceit_mobile extends Component {
   }
 
   addItem = (item) => {
-    console.log('trying to add item');
-    console.log('adding item: ', item);
+    if (!(item.name && item.quantity)) {
+      return;
+    }
+    if (!permittedCategories.includes(item.category)) {
+      item.category = 'Other'
+    }
     this.setState( prevState => ({
       groceryList: prevState.groceryList.map( section => {
         if (section.name === item.category) {
-          const data = section.data.concat({id: Math.floor(Math.random() * 100000), name: item.name, quantity: item.quantity}).sort ( (a, b) => a.name > b.name ? 1 : -1)
+          const data = section.data.concat({
+            id: Math.floor(Math.random() * 10000000), 
+            name: item.name, 
+            quantity: item.quantity})
+            .sort ( (a, b) => a.name > b.name ? 1 : -1)
           return {...section, data: data }
         } else {
           return section;
@@ -176,11 +191,13 @@ export default class groceit_mobile extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const renderSectionHeader = ({section}) => {
-      return (
-        <Separator bordered>
-          <Text style={{fontSize: 15}}>{section.name.toUpperCase()}</Text>
-        </Separator>
-      )
+      if (section.data.length > 0) {
+        return (
+          <Separator bordered>
+            <Text style={{fontSize: 15}}>{section.name.toUpperCase()}</Text>
+          </Separator>
+        )
+      }
     }
     
     return (

@@ -2,7 +2,7 @@ import {
   TabNavigator,
 } from 'react-navigation';
 import HomeScreen from './App.js';
-import FakeScreen from './screens/Fake';
+import RecipesScreen from './screens/Recipes';
 
 const TabNavigatorConfig = {
   swipeEnabled: true,
@@ -18,7 +18,7 @@ const TabNavigatorConfig = {
 
 const Nav = TabNavigator({
   Home: { screen: HomeScreen },
-  Fake: { screen: FakeScreen },
+  Recipes: { screen: RecipesScreen },
 }, TabNavigatorConfig);
 
 export default Nav;

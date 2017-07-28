@@ -6,7 +6,7 @@ class AddModal extends Component {
   state = {
     modalVisible: false,
     name: '',
-    quantity: '',
+    quantity: 0,
     category: ''
   }
 
@@ -15,6 +15,26 @@ class AddModal extends Component {
   };
 
   render() {
+    const updateQuantity = (action) => {
+      console.log('quantity button clicked ', action);
+      switch (action) {
+        case 'add':
+          this.setState( prevState => ({
+            quantity: prevState.quantity + 1,
+            something: 'a thing'
+          }))
+          break;
+        case 'minus':
+          this.setState( prevState => ({
+            quantity: prevState.quantity - 1
+          }))
+          break;
+        default:
+          return true;
+      }
+      console.log(this.state);
+    }
+    
     return (
       <View style={{marginTop: 22}}>
         <Modal
@@ -29,8 +49,15 @@ class AddModal extends Component {
                 onChangeText={val => this.setState({name: val.trim()})}/>
             </Item>
             <Item>
-              <Input placeholder='Quantity'
-                onChangeText={val => this.setState({quantity: val.trim()})}/>
+              <Button rounded light
+                onPress={() => updateQuantity('minus')}>
+                <Text>-</Text>
+              </Button>
+              <Text>{this.state.quantity}</Text>
+              <Button rounded light                
+                  onPress={() => updateQuantity('add')}>
+                <Text>+</Text>
+              </Button>
             </Item>
           <Picker
             selectedValue={this.state.category}
@@ -43,7 +70,7 @@ class AddModal extends Component {
             <Button full success onPress={ () => {
               this.props.addItem(this.state);
               this.setModalVisible(!this.state.modalVisible)              
-            }}><Text>Save Item</Text></Button>
+            }}><Text style={{color: 'white'}}>SAVE ITEM</Text></Button>
           </Form>
       </Modal>
           <Button full success onPress={() => {
