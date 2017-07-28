@@ -8,11 +8,13 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  Text,
   View,
   Image,
-  SectionList
+  SectionList,
+  AsyncStorage
 } from 'react-native';
+import { Container, Header, Content, List, ListItem, Text, Separator } from 'native-base';
+
 import Counter from './components/Counter';
 
 import bag from './images/grocery-bag.jpg';
@@ -43,28 +45,20 @@ const groceryList = [
       { id: 0, name: 'Carrots', quantity: 5},
       { id: 1, name: 'Avocado', quantity: 2}
     ],
-  }
+  },
+    {
+    id: 3,
+    name: 'Meat',
+    data: [
+      { id: 0, name: 'Chicken breasts', quantity: 2},
+      { id: 1, name: 'Värmkorv', quantity: 1}
+    ],
+  },
 ];
 
 export default class groceit_mobile extends Component {
   state = {
     groceryList: []
-  }
-
-  searchNasa = async () => {
-    const json = await fetch('https://images-api.nasa.gov/search?q=jupiter');
-    json.json()
-      .then( data => {
-        console.log(data.collection.items[0]);
-        this.setState({
-          nasaItems: data.collection.items.map( 
-            item => {
-              console.log({...item, renderItem: this.renderItem})
-              return {...item, renderItem: this.renderItem}
-            }
-          ).slice(0, 20),
-        })
-      }).done();
   }
 
   getGroceryList = () => {
@@ -77,30 +71,76 @@ export default class groceit_mobile extends Component {
     })
   } 
 
-  renderItem = ({item}) => (
-    <View>
-      <Text>{item.name}: {item.quantity}</Text>
-    </View>
+  handleClick = (item, section) => {
+    this.setState( prevState => ({
+      groceryList: prevState.groceryList.map( listSection => {
+        if (section === listSection) {
+          console.log(listSection.data.filter( listItem => item !== listItem))
+          return {
+            ...listSection, 
+            data: listSection.data.filter( listItem => item !== listItem)
+          }
+        } else {
+          return listSection
+        }
+      })
+    })
+    )
+  }
+
+  renderItem = ({item, section}) => (
+    <ListItem onPress={() => this.handleClick(item, section)}>
+      <Text style={styles.groceryItem}>{item.name}</Text> 
+      <Text style={styles.groceryItemQuantity}>{item.quantity}</Text>
+    </ListItem>
   )
 
+  //Examples of async storage uses - works just like localStorage but it's async
+  setAsyncStorage = async () => {
+    try {
+      await AsyncStorage.setItem('@GroceIt:key', 'I like to save it.');
+    } catch (error) {
+      console.log('async storage error: ', error);
+      // Error saving data
+    }
+  }
+
+  getAsyncStorage = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@GroceIt:key');
+      if (value !== null){
+        // We have data!!
+        console.log(value);
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  }
+
   componentDidMount() {
-    this.getGroceryList(); 
+    this.getGroceryList();
   }
 
   render() {
     const renderSectionHeader = ({section}) => {
       return (
-        <Text style={{fontSize: 20, fontWeight: 'bold'}}>{section.name}</Text>
+        <Separator bordered>
+          <Text style={{fontSize: 15}}>{section.name.toUpperCase()}</Text>
+        </Separator>
       )
     }
     
     return (
-      <View style={styles.container}>
+      <Container>
+        <Header />
+        <Content>
+        <Text>{this.state.error}</Text>
         <SectionList
           sections={this.state.groceryList}
           renderSectionHeader={renderSectionHeader}
           keyExtractor={ ({id}) => id } />
-      </View>
+        </Content>
+      </Container>
     );
   }
 }
@@ -126,5 +166,8 @@ const styles = StyleSheet.create({
     height: 220,
     width: 180,
   },
+  groceryItem: {
+    flex: 1
+  }
 });
 
