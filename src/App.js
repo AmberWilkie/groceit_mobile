@@ -78,7 +78,13 @@ export default class groceit_mobile extends Component {
           console.log(listSection.data.filter( listItem => item !== listItem))
           return {
             ...listSection, 
-            data: listSection.data.filter( listItem => item !== listItem)
+            data: listSection.data.map( listItem => {
+              if (item === listItem) {
+                console.log(listItem);
+                listItem.disabled = 'true'
+              }
+              return listItem;
+            })
           }
         } else {
           return listSection
@@ -88,12 +94,19 @@ export default class groceit_mobile extends Component {
     )
   }
 
-  renderItem = ({item, section}) => (
-    <ListItem onPress={() => this.handleClick(item, section)}>
-      <Text style={styles.groceryItem}>{item.name}</Text> 
-      <Text style={styles.groceryItemQuantity}>{item.quantity}</Text>
-    </ListItem>
-  )
+  renderItem = ({item, section}) => {
+    if (item.disabled === 'true') {
+      style = styles.groceryItemDisabled
+    } else {
+      style = styles.groceryItem
+    }
+    return (
+      <ListItem onPress={() => this.handleClick(item, section)}>
+        <Text style={style}>{item.name}</Text> 
+        <Text style={[style, {flex: 0}]}>{item.quantity}</Text>
+      </ListItem>
+    )
+  }
 
   //Examples of async storage uses - works just like localStorage but it's async
   setAsyncStorage = async () => {
@@ -168,6 +181,10 @@ const styles = StyleSheet.create({
   },
   groceryItem: {
     flex: 1
+  },
+  groceryItemDisabled: {
+    flex: 1,
+    color: 'lightgray'
   }
 });
 
