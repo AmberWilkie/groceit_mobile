@@ -13,9 +13,22 @@ import {
   SectionList,
   AsyncStorage
 } from 'react-native';
-import { Container, Header, Content, List, ListItem, Text, Separator } from 'native-base';
+import { 
+  Container, 
+  Header, 
+  Content, 
+  List, 
+  ListItem, 
+  Text, 
+  Separator, 
+  Form,
+  Item,
+  Input,
+  Button,
+} from 'native-base';
 
 import Counter from './components/Counter';
+import AddModal from './AddItem.js';
 
 import bag from './images/grocery-bag.jpg';
 
@@ -62,14 +75,21 @@ export default class groceit_mobile extends Component {
   }
 
   getGroceryList = () => {
+    // Man, there should be a way to do this functionally... rargh
+    groceryList.forEach ( section => {
+      section.data = section.data.sort( (a,b) => a.name > b.name ? 1 : -1 )
+    })
+
     this.setState({
-      groceryList: groceryList.map( 
+      groceryList: groceryList
+      .map( 
         item => {
           return {...item, renderItem: this.renderItem}
         }
-      ),
+      )
+      .sort( (a,b) => a.name > b.name ? 1 : -1 )
     })
-  } 
+  };
 
   handleClick = (item, section) => {
     this.setState( prevState => ({
@@ -153,6 +173,7 @@ export default class groceit_mobile extends Component {
           renderSectionHeader={renderSectionHeader}
           keyExtractor={ ({id}) => id } />
         </Content>
+        <AddModal />
       </Container>
     );
   }
