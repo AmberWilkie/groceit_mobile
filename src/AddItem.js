@@ -21,7 +21,7 @@ class AddModal extends Component {
           animationType={"slide"}
           transparent={false}
           visible={this.state.modalVisible}
-          onRequestClose={() => {alert("Modal has been closed.")}}
+          onRequestClose={() => {this.setModalVisible(!this.state.modalVisible)}}
           >
           <Form>
             <Item>
@@ -41,7 +41,7 @@ class AddModal extends Component {
             <Picker.Item label="Meat" value="Meat" />
           </Picker>
             <Button full success onPress={ () => {
-              console.log(this.state);
+              this.props.addItem(this.state);
               this.setModalVisible(!this.state.modalVisible)              
             }}><Text>Save Item</Text></Button>
           </Form>

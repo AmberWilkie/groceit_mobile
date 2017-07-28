@@ -114,6 +114,21 @@ export default class groceit_mobile extends Component {
     )
   }
 
+  addItem = (item) => {
+    console.log('trying to add item');
+    console.log('adding item: ', item);
+    this.setState( prevState => ({
+      groceryList: prevState.groceryList.map( section => {
+        if (section.name === item.category) {
+          const data = section.data.concat({id: 3, name: item.name, quantity: item.quantity}).sort ( (a, b) => a.name > b.name ? 1 : -1)
+          return {...section, data: data }
+        } else {
+          return section;
+        }
+      })
+    }), () => {console.log(this.state);})
+  }
+
   renderItem = ({item, section}) => {
     if (item.disabled === 'true') {
       style = styles.groceryItemDisabled
@@ -173,7 +188,7 @@ export default class groceit_mobile extends Component {
           renderSectionHeader={renderSectionHeader}
           keyExtractor={ ({id}) => id } />
         </Content>
-        <AddModal />
+        <AddModal addItem={this.addItem} />
       </Container>
     );
   }
