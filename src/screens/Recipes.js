@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { FlatList } from 'react-native';
 import { Container, Header, Content, List, ListItem, Text, View } from 'native-base';
 import Accordion from 'react-native-accordion';
+import Collapsible from 'react-native-collapsible';
 
 import renderIf from '../utils/renderif';
 
@@ -15,7 +16,7 @@ const recipesList = [
         id: 0,
         name: 'Dairy',
         data: [
-          { id: 0, name: 'Creme Fraische', quantity: 1},
+          { id: 0, name: 'Creme Fraische and extra text to make this really long', quantity: 1},
           { id: 1, name: 'Butter', quantity: 1 }
         ],
       },
@@ -98,20 +99,29 @@ class RecipesScreen extends Component {
     const renderItem = ({item}) => {
       return (
       <ListItem>
-          <Accordion header={ <Text style={{alignSelf: 'stretch'}}>{item.name}</Text>} 
-            content={ 
+          <Text onPress={() => {
+        this.setState( prevState => {
+          const newState = prevState.recipes.map( recipe => {
+            if (recipe === item) {
+              recipe.show = !recipe.show
+            }
+            return recipe
+          })  
+          return ({recipes: newState})
+        })
+      }}>{item.name}</Text>
+          <Collapsible collapsed={item.show}>            
               <List dataArray={item.groceryItems}
                 renderRow={renderGroceryItems} />
-            }
-        />
+          </Collapsible>
       </ListItem>
     )}
 
     const renderGroceryItems = item => (
         <List dataArray={item.data}
           renderRow={item => (
-            <ListItem >
-              <Text style={{flex: 1, width: '100%'}}>{item.name}</Text>
+            <ListItem>
+              <View><Text>{item.name}{'\n'}</Text></View>
               <Text>{item.quantity}</Text>
             </ListItem>
           )} />
@@ -121,9 +131,10 @@ class RecipesScreen extends Component {
       <View>
       <List>
       <ListItem 
-        style={{width: '100%', flex: 0}}
+        style={{width: '100%'}}
         onPress={() => {
         this.setState( prevState => {
+          console.log(recipe === item);
           const newState = prevState.recipes.map( recipe => {
             if (recipe === item) {
               recipe.show = !recipe.show
